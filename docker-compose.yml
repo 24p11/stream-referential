@@ -9,12 +9,30 @@ services:
     restart: always
     ports:
       - '3308:3306/tcp'
+    security_opt:
+      - seccomp:unconfined
     environment:
       MYSQL_ROOT_PASSWORD:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: repositories
       MYSQL_USER: root
       MYSQL_PASSWORD:
+
+  todo-app-www:
+    depends_on:
+      - db
+    build:
+      context: ../stream-referential-www
+    ports:
+      - '8181:8181/tcp'
+    environment:
+      - APP_KEY
+      - APP_DEBUG
+      - APP_URL
+      - DB_HOST
+      - DB_DATABASE
+      - DB_USERNAME
+      - DB_PASSWORD
 
   todo-app-backend:
     depends_on:
