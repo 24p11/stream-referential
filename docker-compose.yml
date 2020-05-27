@@ -25,6 +25,7 @@ services:
       context: ../stream-referential-www
     ports:
       - '8181:8181/tcp'
+    command: bash -c "sleep 10 && cd /app && php artisan migrate --force"
     environment:
       - APP_KEY
       - APP_DEBUG
@@ -36,7 +37,8 @@ services:
 
   todo-app-backend:
     depends_on:
-      - db
+      - todo-app-www
+    command: bash -c "sleep 10"
     build:
       context: ../stream-referential-back
     volumes:
