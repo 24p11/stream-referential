@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   db:
+    container_name: db
     image: mysql:8.0.20
     command: --default-authentication-plugin=mysql_native_password
     volumes:
@@ -25,8 +26,9 @@ services:
       context: ../stream-referential-www
     ports:
       - '8181:8181/tcp'
-    command: bash -c "sleep 10 && cd /app && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8181"
+    command: bash -c "/wait && cd /app && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8181"
     environment:
+      - WAIT_HOSTS=db:3306
       - APP_KEY
       - APP_DEBUG
       - APP_URL
@@ -37,12 +39,14 @@ services:
 
   todo-app-backend:
     depends_on:
-      - todo-app-www
+      - db
     build:
       context: ../stream-referential-back
     volumes:
       - '${CONFIGURATION}:/var/lib/load/back/configuration'
       - '${DATA}:/data'
+    environment:
+      - WAIT_HOSTS=db:3306
 
 volumes:
   db_data: {}
