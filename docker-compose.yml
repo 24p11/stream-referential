@@ -31,13 +31,14 @@ services:
     command: bash -c "/wait && cd /app && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8181"
     environment:
       - WAIT_HOSTS=stream-referential-db:3306
-      - APP_KEY
-      - APP_DEBUG
-      - APP_URL
-      - DB_HOST
-      - DB_DATABASE
-      - DB_USERNAME
-      - DB_PASSWORD
+      - APP_ENV=local
+      - APP_KEY=base64:XDIUJOCsKtsQ7tL+Onnea9W78ttY5hVA4bfIjav/RIw=
+      - APP_DEBUG=false
+      - APP_URL=127.0.0.1:8181
+      - DB_HOST=stream-referential-db
+      - DB_DATABASE=repositories
+      - DB_USERNAME=root
+      - DB_PASSWORD=
 
   stream-referential-back:
     depends_on:
