@@ -1,8 +1,9 @@
 version: '3.7'
 
 services:
-  db:
-    container_name: db
+
+  stream-referential-db:
+    container_name: stream-referential-db
     image: mysql:8.0.20
     command: --default-authentication-plugin=mysql_native_password
     volumes:
@@ -19,16 +20,16 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD:
 
-  todo-app-www:
+  stream-referential-www:
     depends_on:
-      - db
+      - stream-referential-db
     build:
       context: ../stream-referential-www
     ports:
       - '8181:8181/tcp'
     command: bash -c "/wait && cd /app && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8181"
     environment:
-      - WAIT_HOSTS=db:3306
+      - WAIT_HOSTS=stream-referential-db:3306
       - APP_KEY
       - APP_DEBUG
       - APP_URL
@@ -37,16 +38,17 @@ services:
       - DB_USERNAME
       - DB_PASSWORD
 
-  todo-app-backend:
+  stream-referential-back:
     depends_on:
-      - db
+      - stream-referential-db
     build:
       context: ../stream-referential-back
     volumes:
       - '${CONFIGURATION}:/var/lib/load/back/configuration'
       - '${DATA}:/data'
     environment:
-      - WAIT_HOSTS=db:3306
+      - SPRING_DATASOURCE_URL=jdbc:mysql://stream-referential-db/repositories?serverTimezone=Europe/Paris&useCompression=true&allowMultiQueries=true
+      - WAIT_HOSTS=stream-referential-db:3306
 
 volumes:
   db_data: {}
