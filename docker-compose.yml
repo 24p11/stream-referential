@@ -31,6 +31,7 @@ services:
     command: bash -c "/wait && cd /app && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8181"
     environment:
       - WAIT_HOSTS=stream-referential-db:3306
+      - WAIT_HOSTS_TIMEOUT=90
       - APP_ENV=local
       - APP_KEY=base64:XDIUJOCsKtsQ7tL+Onnea9W78ttY5hVA4bfIjav/RIw=
       - APP_DEBUG=false
@@ -52,6 +53,7 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://stream-referential-db/repositories?serverTimezone=Europe/Paris&useCompression=true&allowMultiQueries=true
       - WAIT_HOSTS=stream-referential-www:8181
+      - WAIT_HOSTS_TIMEOUT=90
 
 volumes:
   db_data: {}
