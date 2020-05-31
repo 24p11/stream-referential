@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
 
@@ -22,6 +22,7 @@ services:
       MYSQL_PASSWORD:
 
   stream-referential-www:
+    container_name: stream-referential-www
     depends_on:
       - stream-referential-db
     build:
@@ -33,7 +34,6 @@ services:
       - WAIT_HOSTS=stream-referential-db:3306
       - WAIT_HOSTS_TIMEOUT=90
       - APP_ENV=local
-      - APP_KEY=base64:XDIUJOCsKtsQ7tL+Onnea9W78ttY5hVA4bfIjav/RIw=
       - APP_DEBUG=false
       - APP_URL=127.0.0.1:8181
       - DB_HOST=stream-referential-db
@@ -42,6 +42,7 @@ services:
       - DB_PASSWORD=
 
   stream-referential-back:
+    container_name: stream-referential-back
     depends_on:
       - stream-referential-db
     build:
