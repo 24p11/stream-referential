@@ -38,6 +38,7 @@ services:
       - APP_URL=127.0.0.1:8181
       - DB_HOST=stream-referential-db
       - DB_DATABASE=repositories
+      - DB_PORT=
       - DB_USERNAME=root
       - DB_PASSWORD=
 
